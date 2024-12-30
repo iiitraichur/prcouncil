@@ -5,8 +5,13 @@
 
 body {
   color: black;
-  background-color: white;
+  background-color: black;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 
 @keyframes slide-in {
   0% {

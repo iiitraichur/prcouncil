@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="w-full bg-black shadow-md">
+    <header className="w-full bg-black pt-6 shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
 
 

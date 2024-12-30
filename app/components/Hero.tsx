@@ -1,28 +1,143 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { db } from "@/lib/firebase"; // Assuming you export your firebase config as `db`
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import {
+  AiOutlineCalendar,
+  AiOutlineUser,
+  AiOutlineClockCircle,
+  AiOutlineLink,
+} from "react-icons/ai";
 
 const Hero: React.FC = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const eventsQuery = query(collection(db, "events"), orderBy("date"));
+    const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
+      const eventsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEvents(eventsData as Array<{ id: string; [key: string]: any }>);
+    });
+    return () => unsubscribe(); // Cleanup listener on component unmount
+  }, []);
+
   return (
-    <div className="relative h-screen bg-black flex flex-col justify-start items-center text-center pt-20">
-      {/* Subtle Background Element */}
-      <div className="absolute inset-0">
-        <div className="h-full w-full">
-          <div className="absolute bg-lime-500 opacity-10 h-40 w-40 rounded-full blur-2xl top-1/4 left-1/3"></div>
-          <div className="absolute bg-lime-500 opacity-10 h-48 w-48 rounded-full blur-2xl top-1/3 right-1/3"></div>
-        </div>
+    <div className="relative min-h-screen bg-black flex flex-col">
+     
+      {/* Main Content */}
+      <div
+        className="relative z-10 flex flex-col pt-28 min-h-screen text-center" // Adjusted padding-top for positioning text higher
+        id="main"
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-4xl md:text-6xl font-extrabold text-lime-400 tracking-tight drop-shadow-lg"
+        >
+          Welcome to
+        </motion.h1>
+        <motion.h2
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2 }}
+          className="text-3xl md:text-5xl font-bold text-white mt-4"
+        >
+          Public Relations Council
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="text-sm md:text-base text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed"
+        >
+          Building bridges, fostering connections, and shaping the future of
+          public engagement.
+        </motion.p>
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.8 }}
+          className="mt-10"
+        >
+          <button className="px-6 py-3 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all transform hover:scale-105">
+            <a href="#events">View All Events</a>
+          </button>
+        </motion.div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10">
-        <h1 className="text-4xl md:text-6xl font-bold text-lime-400">
-          Welcome to
-        </h1>
-        <h2 className="text-3xl md:text-5xl font-semibold text-white mt-2">
-          Public Relations Council
-        </h2>
-        <p className="text-sm md:text-base text-gray-400 mt-4 max-w-lg mx-auto">
-          Building bridges, fostering connections, and shaping the future of public engagement.
-        </p>
+      {/* Events Section */}
+      <div
+        className="relative z-10 mt-12 w-full px-6 flex-1 bg-black text-center py-20"
+        id="events"
+      >
+        <motion.h3
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-5xl font-bold text-lime-400 mb-6"
+        >
+          Browse Events
+        </motion.h3>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ staggerChildren: 0.2 }}
+        >
+          {events.map((event: any, index) => (
+            <motion.div
+              key={event.id}
+              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all transform hover:scale-105 hover:shadow-2xl hover:shadow-lime-500 hover:-translate-y-2 relative overflow-hidden" // Reduced padding for a smaller card
+              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-tr from-lime-600 to-transparent opacity-5"></div>
+              <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4> {/* Reduced font size for title */}
+              <div className="flex items-center space-x-2">
+                <AiOutlineUser className="text-lime-400" />
+                <span className="text-sm">{event.user}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <AiOutlineCalendar className="text-lime-400" />
+                <span className="text-sm">{event.date}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <AiOutlineClockCircle className="text-lime-400" />
+                <span className="text-sm">{event.session}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <AiOutlineLink className="text-lime-400" />
+                <a
+                  href={event.driveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  Drive Link
+                </a>
+              </div>
+              {event.pictureCredits && (
+                <div className="text-sm text-gray-400">
+                  Picture Credits: {event.pictureCredits.join(", ")}
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
+
+
     </div>
   );
 };
