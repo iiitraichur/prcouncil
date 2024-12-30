@@ -11,7 +11,7 @@ import {
 } from "react-icons/ai";
 
 const Hero: React.FC = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Array<{ id: string; [key: string]: any }>>([]);
 
   useEffect(() => {
     const eventsQuery = query(collection(db, "events"), orderBy("date"));
@@ -20,10 +20,11 @@ const Hero: React.FC = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      setEvents(eventsData as Array<{ id: string; [key: string]: any }>);
+      setEvents(eventsData); // No need to cast now
     });
     return () => unsubscribe(); // Cleanup listener on component unmount
   }, []);
+  
 
   return (
     <div className="relative min-h-screen bg-black flex flex-col">
