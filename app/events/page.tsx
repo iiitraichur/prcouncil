@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { AiOutlineUser, AiOutlineCalendar, AiOutlineClockCircle, AiOutlineLink } from "react-icons/ai";
-import { DatePicker } from "antd";
+import { DatePicker} from "antd";
 import '@ant-design/v5-patch-for-react-19';
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface Event {
@@ -12,7 +12,8 @@ interface Event {
   eventTitle: string;
   user: string;
   date: string; // ISO 8601 formatted
-  session: string;
+  session: string; // Could be "Morning", "Afternoon", "Evening"
+  time: string; // Add time field to Firestore (e.g., '14:00' for 2 PM)
   driveLink: string;
   pictureCredits?: string[];
 }
@@ -23,8 +24,15 @@ function EventsPage() {
   const [selectedSession, setSelectedSession] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "events"), (snapshot) => {
+    const eventsQuery = query(
+      collection(db, "events"),
+      orderBy("date", "desc"),   // Sort events by date in descending order (latest first)
+      orderBy("time", "desc")    // Sort events by time in descending order (latest first)
+    );
+
+    const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
       const eventsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -35,22 +43,7 @@ function EventsPage() {
     return () => unsubscribe();
   }, []);
 
-  // Sorting function for events based on latest date and time
-  const sortedEvents = events.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-
-    // Sort by date in descending order (latest date first)
-    if (dateB.getTime() !== dateA.getTime()) {
-      return dateB.getTime() - dateA.getTime();
-    }
-
-    // If the dates are the same, sort by session in reverse order (Evening > Afternoon > Morning)
-    const sessionOrder = { Evening: 0, Afternoon: 1, Morning: 2 };
-    return sessionOrder[a.session] - sessionOrder[b.session];
-  });
-
-  const filteredEvents = sortedEvents.filter((event) => {
+  const filteredEvents = events.filter((event) => {
     const matchesSearch = event.eventTitle.toLowerCase().includes(search.toLowerCase());
     const matchesSession = selectedSession ? event.session === selectedSession : true;
     const matchesDate = selectedDate
@@ -70,6 +63,7 @@ function EventsPage() {
         Explore Events
       </motion.h1>
 
+      {/* Filters */}
       <div className="w-full max-w-5xl flex flex-col md:flex-row gap-4 mb-12">
         <input
           type="text"
@@ -91,7 +85,7 @@ function EventsPage() {
         <DatePicker
           onChange={(date) => setSelectedDate(date ? date.toDate() : null)}
           placeholder="Select Date"
-          className="flex-1 p-3 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-lime-500 outline-none"
+          className="flex-1 p-3 rounded-lg bg-gray-800  focus:ring-2 focus:ring-lime-500 outline-none"
           getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}
         />
         <button
@@ -106,6 +100,7 @@ function EventsPage() {
         </button>
       </div>
 
+      {/* Event List */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-5xl"
         initial={{ opacity: 0 }}
@@ -115,13 +110,12 @@ function EventsPage() {
         {filteredEvents.map((event, index) => (
           <motion.div
             key={event.id}
-            className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 rounded-xl shadow-xl p-6 flex flex-col space-y-4 transform hover:scale-105 hover:shadow-2xl hover:shadow-lime-500 hover:-translate-y-2 transition-all relative overflow-hidden"
+            className="bg-gray-900 text-gray-200 rounded-xl shadow-lg p-6 flex flex-col space-y-4 transform hover:scale-105 transition-all relative"
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.6 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-lime-600 to-transparent opacity-5"></div>
             <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4>
             <div className="flex items-center space-x-2">
               <AiOutlineUser className="text-lime-400" />
@@ -146,11 +140,21 @@ function EventsPage() {
                 Drive Link
               </a>
             </div>
-            {event.pictureCredits && event.pictureCredits.length > 0 && (
-              <div className="text-sm text-gray-400">
-                Picture Credits: {event.pictureCredits.join(", ")}
-              </div>
-            )}
+
+            {Array.isArray(event.pictureCredits) && event.pictureCredits.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              <span className="text-sm text-gray-400">Picture Credits:</span>
+              {event.pictureCredits.map((credit, idx) => (
+                <span
+                  key={idx}
+                  className="text-sm text-gray-400"
+                >
+                  {credit}
+                </span>
+              ))}
+            </div>
+          )}
+            
           </motion.div>
         ))}
       </motion.div>
@@ -165,6 +169,7 @@ function EventsPage() {
           No events found. Try adjusting your filters.
         </motion.div>
       )}
+
     </div>
   );
 }

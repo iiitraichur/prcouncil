@@ -1,10 +1,11 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase'; // Assuming you export your firebase config as `db`
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify'; // For better error handling and notifications
 import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
+import moment from 'moment-timezone';
 
 function Page() {
   const [formData, setFormData] = useState({
@@ -21,9 +22,11 @@ function Page() {
     if (!formData.user.trim()) errors.user = 'User is required';
     if (!formData.eventTitle.trim()) errors.eventTitle = 'Event title is required';
     if (!formData.driveLink.trim()) errors.driveLink = 'Drive link is required';
+
     formData.pictureCredits.forEach((credit, index) => {
       if (!credit.trim()) errors[`pictureCredits-${index}`] = 'Picture credit is required';
     });
+
     setError(errors);
     return Object.keys(errors).length === 0;
   };
@@ -32,16 +35,16 @@ function Page() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // Dynamically set date and time
-    const currentDate = new Date();
-    const dynamicDate = currentDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    const dynamicTime = currentDate.toLocaleTimeString('en-US', { hour12: false }); // Format: HH:MM:SS
+    // Dynamically setting the current date and time in Asia/Kolkata timezone
+    const currentDate = moment().tz('Asia/Kolkata');
+    const date = currentDate.format('YYYY-MM-DD');
+    const time = currentDate.format('HH:mm:ss');
 
     try {
       const docRef = await addDoc(collection(db, 'events'), {
         ...formData,
-        date: dynamicDate,
-        time: dynamicTime,
+        date, // Set the dynamically updated date
+        time, // Set the dynamically updated time
       });
       toast.success('Event added successfully!');
       console.log('Document written with ID: ', docRef.id);
@@ -175,4 +178,5 @@ function Page() {
     </div>
   );
 }
+
 export default Page;

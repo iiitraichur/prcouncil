@@ -164,7 +164,26 @@ function EventsPage() {
               >
                 Drive Link
               </a>
+              
             </div>
+
+            {/* picture credits */}
+{/* Picture Credits */}
+{Array.isArray(event.pictureCredits) && event.pictureCredits.length > 0 && (
+  <div className="flex flex-wrap gap-2 mt-2">
+    <span className="text-sm text-gray-400">Picture Credits:</span>
+    {event.pictureCredits.map((credit, idx) => (
+      <span
+        key={idx}
+        className="text-sm text-gray-400"
+      >
+        {credit}
+      </span>
+    ))}
+  </div>
+)}
+
+
             <div className="flex space-x-2 mt-4">
               <button
                 onClick={() => setEditEvent(event)}
@@ -230,6 +249,10 @@ function EventsPage() {
               onChange={(e) =>
                 setEditEvent({ ...editEvent, driveLink: e.target.value })
               }
+            />
+            <Input
+              placeholder="Drive Link"
+              value={editEvent.pictureCredits}
             />
           </div>
         )}
