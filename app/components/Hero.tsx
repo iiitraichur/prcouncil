@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { db } from "@/lib/firebase"; // Assuming you export your firebase config as `db`
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 import {
   AiOutlineCalendar,
   AiOutlineUser,
@@ -14,24 +14,29 @@ const Hero: React.FC = () => {
   const [events, setEvents] = useState<Array<{ id: string; [key: string]: any }>>([]);
 
   useEffect(() => {
-    const eventsQuery = query(collection(db, "events"), orderBy("date"));
+    const eventsQuery = query(
+      collection(db, "events"),
+      orderBy("date", "desc"),
+      orderBy("time", "desc"), // Ensure "time" is part of your Firestore document
+      limit(3)
+    );
+
     const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
       const eventsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setEvents(eventsData); // No need to cast now
+      setEvents(eventsData);
     });
-    return () => unsubscribe(); // Cleanup listener on component unmount
+
+    return () => unsubscribe();
   }, []);
-  
 
   return (
     <div className="relative min-h-screen bg-black flex flex-col">
-     
       {/* Main Content */}
       <div
-        className="relative z-10 flex flex-col pt-28 min-h-screen text-center" // Adjusted padding-top for positioning text higher
+        className="relative z-10 flex flex-col pt-28 min-h-screen text-center"
         id="main"
       >
         <motion.h1
@@ -68,7 +73,7 @@ const Hero: React.FC = () => {
           className="mt-10"
         >
           <button className="px-6 py-3 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all transform hover:scale-105">
-            <a href="#events">View All Events</a>
+            <a href="#events">Latest Events</a>
           </button>
         </motion.div>
       </div>
@@ -85,7 +90,7 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-5xl font-bold text-lime-400 mb-6"
         >
-          Browse Events
+          Latest Events
         </motion.h3>
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
@@ -97,14 +102,14 @@ const Hero: React.FC = () => {
           {events.map((event: any, index) => (
             <motion.div
               key={event.id}
-              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all transform hover:scale-105 hover:shadow-2xl hover:shadow-lime-500 hover:-translate-y-2 relative overflow-hidden" // Reduced padding for a smaller card
+              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all transform hover:scale-105 hover:shadow-2xl hover:shadow-lime-500 hover:-translate-y-2 relative overflow-hidden"
               whileHover={{ scale: 1.05 }}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-lime-600 to-transparent opacity-5"></div>
-              <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4> {/* Reduced font size for title */}
+              <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4>
               <div className="flex items-center space-x-2">
                 <AiOutlineUser className="text-lime-400" />
                 <span className="text-sm">{event.user}</span>
@@ -136,9 +141,14 @@ const Hero: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Browse All CTA */}
+        <div className="mt-12">
+          <button className="px-6 py-3 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all transform hover:scale-105">
+            <a href="#main">Browse All Events</a>
+          </button>
+        </div>
       </div>
-
-
     </div>
   );
 };

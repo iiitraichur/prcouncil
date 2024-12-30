@@ -9,7 +9,6 @@ import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
 function Page() {
   const [formData, setFormData] = useState({
     user: '',
-    date: new Date().toISOString().split('T')[0],
     eventTitle: '',
     session: 'Morning',
     driveLink: '',
@@ -33,13 +32,22 @@ function Page() {
     e.preventDefault();
     if (!validateForm()) return;
 
+    // Dynamically set date and time
+    const currentDate = new Date();
+    const dynamicDate = currentDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const dynamicTime = currentDate.toLocaleTimeString('en-US', { hour12: false }); // Format: HH:MM:SS
+
     try {
-      const docRef = await addDoc(collection(db, 'events'), formData);
+      const docRef = await addDoc(collection(db, 'events'), {
+        ...formData,
+        date: dynamicDate,
+        time: dynamicTime,
+      });
       toast.success('Event added successfully!');
       console.log('Document written with ID: ', docRef.id);
+
       setFormData({
         user: '',
-        date: new Date().toISOString().split('T')[0],
         eventTitle: '',
         session: 'Morning',
         driveLink: '',
@@ -72,99 +80,98 @@ function Page() {
   };
 
   return (
-    <div className="bg-black p-8 ">
-   
-    <div className="p-6 max-w-3xl mx-auto bg-gray-900 text-gray-200 rounded-md shadow-md">
-      <h1 className="text-2xl font-semibold mb-4">Add Event</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block">User</label>
-          <input
-            type="text"
-            name="user"
-            value={formData.user}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
-          />
-          {error.user && <p className="text-red-500 text-sm">{error.user}</p>}
-        </div>
+    <div className="bg-black p-8">
+      <div className="p-6 max-w-3xl mx-auto bg-gray-900 text-gray-200 rounded-md shadow-md">
+        <h1 className="text-2xl font-semibold mb-4">Add Event</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block">User</label>
+            <input
+              type="text"
+              name="user"
+              value={formData.user}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+            />
+            {error.user && <p className="text-red-500 text-sm">{error.user}</p>}
+          </div>
 
-        <div>
-          <label className="block">Event Title</label>
-          <input
-            type="text"
-            name="eventTitle"
-            value={formData.eventTitle}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
-          />
-          {error.eventTitle && <p className="text-red-500 text-sm">{error.eventTitle}</p>}
-        </div>
+          <div>
+            <label className="block">Event Title</label>
+            <input
+              type="text"
+              name="eventTitle"
+              value={formData.eventTitle}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+            />
+            {error.eventTitle && <p className="text-red-500 text-sm">{error.eventTitle}</p>}
+          </div>
 
-        <div>
-          <label className="block">Session</label>
-          <select
-            name="session"
-            value={formData.session}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
-          >
-            <option value="Morning">Morning</option>
-            <option value="Afternoon">Afternoon</option>
-            <option value="Evening">Evening</option>
-            <option value="Night">Night</option>
-          </select>
-        </div>
+          <div>
+            <label className="block">Session</label>
+            <select
+              name="session"
+              value={formData.session}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+            >
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+            </select>
+          </div>
 
-        <div>
-          <label className="block">Drive Link</label>
-          <input
-            type="url"
-            name="driveLink"
-            value={formData.driveLink}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
-          />
-          {error.driveLink && <p className="text-red-500 text-sm">{error.driveLink}</p>}
-        </div>
+          <div>
+            <label className="block">Drive Link</label>
+            <input
+              type="url"
+              name="driveLink"
+              value={formData.driveLink}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+            />
+            {error.driveLink && <p className="text-red-500 text-sm">{error.driveLink}</p>}
+          </div>
 
-        <div>
-          <label className="block">Picture Credits</label>
-          {formData.pictureCredits.map((credit, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <input
-                type="text"
-                value={credit}
-                onChange={(e) => handleCreditChange(index, e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() => handleRemoveCredit(index)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <AiOutlineCloseCircle size={20} />
-              </button>
-            </div>
-          ))}
+          <div>
+            <label className="block">Picture Credits</label>
+            {formData.pictureCredits.map((credit, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={credit}
+                  onChange={(e) => handleCreditChange(index, e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveCredit(index)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <AiOutlineCloseCircle size={20} />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddCredit}
+              className="flex items-center space-x-2 text-blue-500 hover:text-blue-700 mt-2"
+            >
+              <AiOutlinePlus />
+              <span>Add Credit</span>
+            </button>
+          </div>
+
           <button
-            type="button"
-            onClick={handleAddCredit}
-            className="flex items-center space-x-2 text-blue-500 hover:text-blue-700 mt-2"
+            type="submit"
+            className="w-full bg-blue-500 text-gray-200 px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
           >
-            <AiOutlinePlus />
-            <span>Add Credit</span>
+            Submit
           </button>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-gray-200 px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+        </form>
+      </div>
     </div>
   );
 }
