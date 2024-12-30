@@ -23,7 +23,6 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
 
 
-        {/* Navbar for Desktop */}
         <nav className="hidden lg:flex gap-6 items-center justify-center p-2 border border-lime-500 rounded-full bg-transparent max-w-4xl mx-auto">
           {navItems.map((item, index) => (
             <a
