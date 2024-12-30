@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineUser, AiOutlineCalendar, AiOutlineClockCircle, AiOutlineLink } from "react-icons/ai";
 import { DatePicker } from "antd";
+import '@ant-design/v5-patch-for-react-19';
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 

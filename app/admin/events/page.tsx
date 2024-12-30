@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineUser, AiOutlineCalendar, AiOutlineClockCircle, AiOutlineLink } from "react-icons/ai";
 import { DatePicker, Modal, Input, message } from "antd";
-import { collection, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import '@ant-design/v5-patch-for-react-19';
+import { collection, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-
-const { confirm } = Modal;
 
 interface Event {
   id: string;
   eventTitle: string;
   user: string;
   date: string; // ISO 8601 formatted
-  session: string;
+  session: string; // Could be "Morning", "Afternoon", "Evening"
+  time: string; // Add time field to Firestore (e.g., '14:00' for 2 PM)
   driveLink: string;
   pictureCredits?: string[];
 }
@@ -26,7 +26,13 @@ function EventsPage() {
   const [editEvent, setEditEvent] = useState<Event | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "events"), (snapshot) => {
+    const eventsQuery = query(
+      collection(db, "events"),
+      orderBy("date", "desc"),   // Sort events by date in descending order (latest first)
+      orderBy("time", "desc")    // Sort events by time in descending order (latest first)
+    );
+
+    const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
       const eventsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -37,26 +43,14 @@ function EventsPage() {
     return () => unsubscribe();
   }, []);
 
-  const handleDelete = (eventId: string) => {
-    confirm({
-      title: "Are you sure you want to delete this event?",
-      content: "This action cannot be undone.",
-      okText: "Yes, Delete",
-      okType: "danger",
-      cancelText: "Cancel",
-      onOk: async () => {
-        try {
-          await deleteDoc(doc(db, "events", eventId));
-          message.success("Event deleted successfully!");
-        } catch (error) {
-          console.error("Error deleting event: ", error);
-          message.error("Failed to delete event.");
-        }
-      },
-      onCancel() {
-        message.info("Event deletion canceled.");
-      },
-    });
+  const handleDelete = async (eventId: string) => {
+    try {
+      await deleteDoc(doc(db, "events", eventId));
+      message.success("Event deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting event: ", error);
+      message.error("Failed to delete event.");
+    }
   };
 
   const handleEdit = async () => {
@@ -116,7 +110,7 @@ function EventsPage() {
         <DatePicker
           onChange={(date) => setSelectedDate(date ? date.toDate() : null)}
           placeholder="Select Date"
-          className="flex-1 p-3 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-lime-500 outline-none"
+          className="flex-1 p-3 rounded-lg bg-gray-800  focus:ring-2 focus:ring-lime-500 outline-none"
           getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}
         />
         <button
@@ -181,7 +175,7 @@ function EventsPage() {
               <button
                 onClick={() => handleDelete(event.id)}
                 className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400 transition"
-                >
+              >
                 Delete
               </button>
             </div>
