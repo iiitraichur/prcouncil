@@ -32,11 +32,25 @@ function EventsPage() {
       setEvents(eventsData);
     });
 
-    // Cleanup function to unsubscribe on component unmount
     return () => unsubscribe();
   }, []);
 
-  const filteredEvents = events.filter((event) => {
+  // Sorting function for events based on latest date and time
+  const sortedEvents = events.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    // Sort by date in descending order (latest date first)
+    if (dateB.getTime() !== dateA.getTime()) {
+      return dateB.getTime() - dateA.getTime();
+    }
+
+    // If the dates are the same, sort by session in reverse order (Evening > Afternoon > Morning)
+    const sessionOrder = { Evening: 0, Afternoon: 1, Morning: 2 };
+    return sessionOrder[a.session] - sessionOrder[b.session];
+  });
+
+  const filteredEvents = sortedEvents.filter((event) => {
     const matchesSearch = event.eventTitle.toLowerCase().includes(search.toLowerCase());
     const matchesSession = selectedSession ? event.session === selectedSession : true;
     const matchesDate = selectedDate
