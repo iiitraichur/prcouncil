@@ -145,9 +145,10 @@ const Hero: React.FC = () => {
         {/* Browse All CTA */}
         <div className="mt-12">
           <button className="px-6 py-3 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all transform hover:scale-105">
-            <a href="#main">Browse All Events</a>
+            <a href="/events">Browse All Events</a>
           </button>
         </div>
+
       </div>
     </div>
   );
