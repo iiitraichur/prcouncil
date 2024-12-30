@@ -14,7 +14,9 @@ const RequestDeletion: React.FC = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -30,21 +32,44 @@ const RequestDeletion: React.FC = () => {
     }
   };
 
+  const handleSubmitAnotherRequest = () => {
+    setSubmitted(false); // Reset the submitted state
+    setFormData({
+      name: "",
+      email: "",
+      photoLink: "",
+      reason: "",
+    }); // Reset the form data
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeInOut" }}
+      className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 px-4"
+    >
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
         className="w-full max-w-4xl bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-3xl shadow-2xl p-8 lg:p-12"
       >
         {!submitted ? (
           <form onSubmit={handleSubmit} className="space-y-8">
-            <h1 className="text-4xl font-extrabold text-lime-400 text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="text-4xl font-extrabold text-lime-400 text-center"
+            >
               Photo Deletion Request
-            </h1>
+            </motion.h1>
             <div className="grid gap-6 md:grid-cols-2">
-              <input
+              <motion.input
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2 }}
                 type="text"
                 name="name"
                 placeholder="Your Name"
@@ -53,7 +78,10 @@ const RequestDeletion: React.FC = () => {
                 onChange={handleInputChange}
                 required
               />
-              <input
+              <motion.input
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2, delay: 0.1 }}
                 type="email"
                 name="email"
                 placeholder="Your Email"
@@ -63,7 +91,10 @@ const RequestDeletion: React.FC = () => {
                 required
               />
             </div>
-            <input
+            <motion.input
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.2 }}
               type="url"
               name="photoLink"
               placeholder="Photo Link"
@@ -72,7 +103,10 @@ const RequestDeletion: React.FC = () => {
               onChange={handleInputChange}
               required
             />
-            <textarea
+            <motion.textarea
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.3 }}
               name="reason"
               placeholder="Reason for Deletion"
               className="w-full p-4 bg-black text-white rounded-xl border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500"
@@ -80,19 +114,21 @@ const RequestDeletion: React.FC = () => {
               onChange={handleInputChange}
               rows={6}
               required
-            ></textarea>
-            <button
+            ></motion.textarea>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
               className="w-full py-4 bg-lime-400 text-black font-semibold text-lg rounded-xl hover:bg-lime-500 transition-all"
             >
               Submit Request
-            </button>
+            </motion.button>
           </form>
         ) : (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
             className="text-center space-y-6"
           >
             <h2 className="text-3xl font-bold text-lime-400">
@@ -101,16 +137,18 @@ const RequestDeletion: React.FC = () => {
             <p className="text-gray-300 text-lg">
               Our team will review your request and get back to you soon.
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-lime-400 text-black font-semibold text-lg rounded-full hover:bg-lime-500 transition-all"
-              onClick={() => setSubmitted(false)}
+              onClick={handleSubmitAnotherRequest}
             >
               Submit Another Request
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
