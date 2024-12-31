@@ -24,7 +24,13 @@ const RequestDeletion: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "photoDeletionRequests"), formData);
+      // Add date and time stamp
+      const timestamp = new Date().toISOString();
+
+      await addDoc(collection(db, "photoDeletionRequests"), {
+        ...formData,
+        timestamp, // Add timestamp field
+      });
       setSubmitted(true);
     } catch (error) {
       console.error("Error adding document: ", error);
