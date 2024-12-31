@@ -236,6 +236,7 @@ function EventsPage() {
                 setEditEvent({ ...editEvent, user: e.target.value })
               }
             />
+            
             <Input
               placeholder="Session"
               value={editEvent.session}
