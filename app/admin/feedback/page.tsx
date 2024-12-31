@@ -117,6 +117,7 @@ export default function FeedbackDashboard() {
                   <tr key={feedback.id} className="border-b border-lime-500">
                     <td className="p-2 break-words">{feedback.email}</td>
                     <td className="p-2 break-words">{feedback.name}</td>
+                    <td className="p-2 break-words">{feedback.rating}</td>
                     <td className="p-2 break-words">{feedback.feedback}</td>
                     <td className="p-2 flex gap-2">
                       <button
