@@ -12,6 +12,7 @@ interface Feedback {
   email: string;
   feedback: string;
   name: string;
+  rating: number;
   reviewed: boolean;
 }
 
@@ -62,6 +63,7 @@ export default function FeedbackDashboard() {
                 <tr className="bg-lime-600 text-black">
                   <th className="p-2">Email</th>
                   <th className="p-2">Name</th>
+                  <th className="p-2">Rating</th>
                   <th className="p-2">Feedback</th>
                   <th className="p-2">Actions</th>
                 </tr>
@@ -71,6 +73,7 @@ export default function FeedbackDashboard() {
                   <tr key={feedback.id} className="border-b border-lime-500">
                     <td className="p-2 break-words">{feedback.email}</td>
                     <td className="p-2 break-words">{feedback.name}</td>
+                    <td className="p-2 break-words">{feedback.rating}</td>
                     <td className="p-2 break-words">{feedback.feedback}</td>
                     <td className="p-2 flex gap-2">
                       <button
@@ -104,6 +107,7 @@ export default function FeedbackDashboard() {
                 <tr className="bg-lime-600 text-black">
                   <th className="p-2">Email</th>
                   <th className="p-2">Name</th>
+                  <th className="p-2">Rating</th>
                   <th className="p-2">Feedback</th>
                   <th className="p-2">Actions</th>
                 </tr>
