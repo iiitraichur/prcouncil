@@ -92,6 +92,7 @@ const Hero: React.FC = () => {
         >
           Latest Events
         </motion.h3>
+
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
           initial={{ opacity: 0 }}
@@ -102,13 +103,17 @@ const Hero: React.FC = () => {
           {events.map((event: any, index) => (
             <motion.div
               key={event.id}
-              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all transform hover:scale-105 hover:shadow-2xl hover:shadow-lime-500 hover:-translate-y-2 relative overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black
+              text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all 
+              transform hover:scale-100 hover:shadow-2xl hover:shadow-lime-500 
+              relative overflow-hidden"
+              whileHover={{ scale: 1 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 0.8, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-lime-600 to-transparent opacity-5"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-lime-600
+               to-transparent opacity-5"></div>
               <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4>
               <div className="flex items-center space-x-2">
                 <AiOutlineUser className="text-lime-400" />
@@ -141,6 +146,15 @@ const Hero: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* <img 
+  src="https://i.ibb.co/DwpJzMz/bg.jpg" // Replace with the direct image URL 
+  alt="Description of the image" 
+  className="w-full h-auto h-10 w-10 rounded-lg"
+/> */}
+
+
+        
 
         {/* Browse All CTA */}
         <div className="mt-12">
