@@ -34,11 +34,13 @@ const Hero: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-black flex flex-col">
+      
       {/* Main Content */}
       <div
         className="relative z-10 flex flex-col pt-28 min-h-screen text-center"
         id="main"
       >
+        
         <motion.h1
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,15 +148,6 @@ const Hero: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* <img 
-  src="https://i.ibb.co/DwpJzMz/bg.jpg" // Replace with the direct image URL 
-  alt="Description of the image" 
-  className="w-full h-auto h-10 w-10 rounded-lg"
-/> */}
-
-
-        
 
         {/* Browse All CTA */}
         <div className="mt-12">

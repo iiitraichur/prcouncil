@@ -110,7 +110,8 @@ function EventsPage() {
         {filteredEvents.map((event, index) => (
           <motion.div
             key={event.id}
-            className="bg-gray-900 text-gray-200 rounded-xl shadow-lg p-6 flex flex-col space-y-4 transform hover:scale-105 transition-all relative"
+            className="bg-gray-900 text-gray-200 rounded-xl shadow-lg 
+            p-6 flex flex-col space-y-4 transform hover:scale-105 transition-all relative"
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
