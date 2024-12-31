@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import StarRating from ".//StarRating";
+
 type FormData = {
   name: string;
   email: string;
@@ -36,7 +37,10 @@ const Feedback: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "feedback"), formData);
+      await addDoc(collection(db, "feedback"), {
+        ...formData,
+        timestamp: new Date().toISOString(), // Add timestamp
+      });
       setSubmitted(true);
       setError(null); // Clear any previous errors
     } catch (error) {
@@ -51,7 +55,7 @@ const Feedback: React.FC = () => {
       name: "",
       email: "",
       feedback: "",
-      rating: 2,  // Reset to default rating
+      rating: 3, // Reset to default rating
     });
   };
 
