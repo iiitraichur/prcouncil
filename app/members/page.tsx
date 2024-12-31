@@ -17,7 +17,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Harsha',
     role: 'PR Lead',
-    photo: '/images/harsha.jpg',
+    photo: 'https://i.ibb.co/tCKVFmM/harsha1.png',
     bio: 'Dedicated leader with a passion for innovation.',
     linkedin: 'https://www.linkedin.com/in/kvjharsha/', // Replace with actual LinkedIn profile
     email: 'cs23b1034@iiitr.ac.in', // Replace with actual email
@@ -25,7 +25,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Santhosh',
     role: 'Shutter Squad',
-    photo: '/images/santhosh.jpg',
+    photo: 'https://i.ibb.co/dBv74SF/santhosh.png',
     bio: 'Dedicated to photography and passionate about technology.',
     linkedin: 'https://www.linkedin.com/in/santhosh-yanamadni-801b56299?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
     email: 'ad23b1060@iiitr.ac.in',
@@ -33,7 +33,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Abhishek',
     role: 'CC Ideation Lead',
-    photo: '/images/abhishek.jpg',
+    photo: 'https://i.ibb.co/Zg48jsJ/abhishek.png',
     bio: 'Creative thinker and innovation enthusiast.',
     linkedin: 'https://www.linkedin.com/in/abhishek-buddiga-bb5a0b2b8/',
     email: 'ad23b1012@iiitr.ac.in',
