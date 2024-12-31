@@ -11,8 +11,10 @@ const NavbarAdmin: React.FC = () => {
   // Define the navigation items with routes
   const navItems = [
     { name: 'Home', path: '/admin' },
-    { name: 'Edit Events', path: '/admin/events' },
     { name: 'Add Events', path: '/admin/add-event' },
+    { name: 'Edit Events', path: '/admin/events' },
+    { name: 'Deletion-request', path: '/admin/deletion' },
+    { name: 'Feedback', path: '/admin/feedback' },
   ];
 
   const toggleMenu = () => {
