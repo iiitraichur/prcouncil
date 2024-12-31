@@ -34,13 +34,8 @@ const Hero: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-black flex flex-col">
-      
       {/* Main Content */}
-      <div
-        className="relative z-10 flex flex-col pt-28 min-h-screen text-center"
-        id="main"
-      >
-        
+      <div className="relative z-10 flex flex-col pt-28 h-[80vh] text-center" id="main">
         <motion.h1
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,8 +58,7 @@ const Hero: React.FC = () => {
           transition={{ duration: 1.5 }}
           className="text-sm md:text-base text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed"
         >
-          Building bridges, fostering connections, and shaping the future of
-          public engagement.
+          Building bridges, fostering connections, and shaping the future of public engagement.
         </motion.p>
 
         {/* CTA Button */}
@@ -81,10 +75,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Events Section */}
-      <div
-        className="relative z-10 mt-12 w-full px-6 flex-1 bg-black text-center py-20"
-        id="events"
-      >
+      <div className="relative z-10 mt-1 w-full px-6 flex flex-col justify-center items-center bg-black text-center py-20" id="events">
         <motion.h3
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,26 +87,20 @@ const Hero: React.FC = () => {
         </motion.h3>
 
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-5xl"
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.2 }}
         >
-          {events.map((event: any, index) => (
+          {events.map((event, index) => (
             <motion.div
               key={event.id}
-              className="bg-gradient-to-br from-gray-800 via-gray-900 to-black
-              text-gray-200 rounded-xl shadow-xl p-4 flex flex-col space-y-4 transition-all 
-              transform hover:scale-100 hover:shadow-2xl hover:shadow-lime-500 
-              relative overflow-hidden"
-              whileHover={{ scale: 1 }}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 0.8, y: 0 }}
+              className="bg-gray-900 text-gray-200 rounded-xl shadow-lg p-6 flex flex-col space-y-4 transform hover:scale-105 transition-all relative"
+              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-lime-600
-               to-transparent opacity-5"></div>
               <h4 className="text-xl font-bold text-lime-400 truncate">{event.eventTitle}</h4>
               <div className="flex items-center space-x-2">
                 <AiOutlineUser className="text-lime-400" />
@@ -140,14 +125,30 @@ const Hero: React.FC = () => {
                   Drive Link
                 </a>
               </div>
-              {event.pictureCredits && (
-                <div className="text-sm text-gray-400">
-                  Picture Credits: {event.pictureCredits.join(", ")}
+              {Array.isArray(event.pictureCredits) && event.pictureCredits.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <span className="text-sm text-gray-400">Picture Credits:</span>
+                  {event.pictureCredits.map((credit, idx) => (
+                    <span key={idx} className="text-sm text-gray-400">
+                      {credit}
+                    </span>
+                  ))}
                 </div>
               )}
             </motion.div>
           ))}
         </motion.div>
+
+        {events.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-gray-400 text-center mt-12"
+          >
+            No events found. Try adjusting your filters.
+          </motion.div>
+        )}
 
         {/* Browse All CTA */}
         <div className="mt-12">
@@ -155,9 +156,7 @@ const Hero: React.FC = () => {
             <a href="/events">Browse All Events</a>
           </button>
         </div>
-
       </div>
-      
     </div>
   );
 };

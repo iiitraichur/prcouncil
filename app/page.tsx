@@ -1,11 +1,13 @@
 import React from 'react'
-import Navbar from './components/Navbar'
+import Terminal from './components/Terminal'
 import Hero from './components/Hero'
 
 const page = () => {
   return (
     <div>
       <Hero/>
+      <Terminal/>
+
     </div>
   )
 }
