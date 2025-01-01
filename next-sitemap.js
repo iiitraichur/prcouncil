@@ -1,6 +1,6 @@
 // next-sitemap.js (or next-sitemap.ts)
 module.exports = {
-    siteUrl: 'https://www.prciiitr.vercel.app', // Replace with your actual domain
+    siteUrl: 'https://prciiitr.vercel.app', // Replace with your actual domain
     generateRobotsTxt: true, // Generate a robots.txt file
     changefreq: 'daily', // Frequency of content change
     priority: 0.7, // Default priority
