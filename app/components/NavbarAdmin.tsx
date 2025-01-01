@@ -1,16 +1,18 @@
+'use client';
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation'; // Use for getting the current pathname
 import { auth, firebaseAuth } from '@/lib/firebase';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const NavbarAdmin: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter(); // Initialize router here
+  const pathname = usePathname(); // To get the current route
 
+  // Define the navigation items with routes
   const navItems = [
     { name: 'Home', path: '/admin' },
     { name: 'Add Events', path: '/admin/add-event' },
@@ -27,6 +29,8 @@ const NavbarAdmin: React.FC = () => {
     await firebaseAuth.signOut(auth);
     router.push("/sign-in");
   };
+
+
 
   return (
     <header className="w-full bg-black pt-6 shadow-md">
@@ -47,6 +51,7 @@ const NavbarAdmin: React.FC = () => {
             </motion.a>
           ))}
 
+
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-700 px-6 py-2 rounded-full text-white font-medium shadow-lg hover:from-red-600 hover:to-red-800 hover:shadow-xl focus:outline-none transition duration-300"
@@ -54,8 +59,10 @@ const NavbarAdmin: React.FC = () => {
             <FontAwesomeIcon icon={faSignOutAlt} className="text-white w-5 h-5" />
             Logout
           </button>
+
         </nav>
 
+        {/* Hamburger Icon for Mobile */}
         <button
           className="lg:hidden text-white text-xl focus:outline-none"
           onClick={toggleMenu}
@@ -64,6 +71,7 @@ const NavbarAdmin: React.FC = () => {
         </button>
       </div>
 
+      {/* Side Drawer for Mobile */}
       <motion.div
         className={`fixed top-0 right-0 h-full w-64 bg-black shadow-lg transform ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'

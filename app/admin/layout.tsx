@@ -1,19 +1,23 @@
-"use client";
+"use client"
+import React, { ReactNode } from 'react';
+import { useRouter } from 'next/navigation'; // Import for routing if needed
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import PrivateRoute from "../components/PrivateRoute";
+import NavbarAdmin from "../components/NavbarAdmin";
 
-const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    const isAuthenticated = false; // Replace with actual auth check
-    if (!isAuthenticated) {
-      router.push('/sign-in');;
-    }
-  }, [router]);
-
-  return <>{children}</>;
+type LayoutProps = {
+  children: ReactNode;
 };
 
-export default PrivateRoute;
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const router = useRouter(); // Use this for any routing logic, if required
+
+  return (
+    <PrivateRoute>
+      <NavbarAdmin />
+      <main>{children}</main>
+    </PrivateRoute>
+  );
+};
+
+export default Layout;
