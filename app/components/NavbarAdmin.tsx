@@ -3,6 +3,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation'; // Use for getting the current pathname
+import { auth, firebaseAuth } from '@/lib/firebase';
+import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const NavbarAdmin: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +24,13 @@ const NavbarAdmin: React.FC = () => {
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  const handleLogout = async () => {
+    await firebaseAuth.signOut(auth);
+    router.push("/sign-in");
+  };
+
+
 
   return (
     <header className="w-full bg-black pt-6 shadow-md">
@@ -39,6 +50,16 @@ const NavbarAdmin: React.FC = () => {
               {item.name}
             </motion.a>
           ))}
+
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-700 px-6 py-2 rounded-full text-white font-medium shadow-lg hover:from-red-600 hover:to-red-800 hover:shadow-xl focus:outline-none transition duration-300"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="text-white w-5 h-5" />
+            Logout
+          </button>
+
         </nav>
 
         {/* Hamburger Icon for Mobile */}

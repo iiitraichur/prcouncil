@@ -1,17 +1,22 @@
-import React from 'react';
-import { ReactNode } from 'react';
-import NavbarAdmin from '../components/NavbarAdmin';
+"use client"
+import React, { ReactNode } from 'react';
+import { useRouter } from 'next/navigation'; // Import for routing if needed
+
+import PrivateRoute from "../components/PrivateRoute";
+import NavbarAdmin from "../components/NavbarAdmin";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const router = useRouter(); // Use this for any routing logic, if required
+
   return (
-    <>
-        <NavbarAdmin/>
-      {children}
-    </>
+    <PrivateRoute>
+      <NavbarAdmin />
+      <main>{children}</main>
+    </PrivateRoute>
   );
 };
 
