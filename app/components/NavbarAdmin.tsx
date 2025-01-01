@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { usePathname } from 'next/navigation'; // Use for getting the current pathname
+import { usePathname } from 'next/navigation'; 
 import { auth, firebaseAuth } from '@/lib/firebase';
 import router from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,9 +10,8 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const NavbarAdmin: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname(); // To get the current route
+  const pathname = usePathname(); 
 
-  // Define the navigation items with routes
   const navItems = [
     { name: 'Home', path: '/admin' },
     { name: 'Add Events', path: '/admin/add-event' },
