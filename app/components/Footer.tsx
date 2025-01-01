@@ -1,8 +1,34 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube, FaLinkedin, FaEnvelope, FaPhone } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  
+  const [prLogoClicks, setPrLogoClicks] = useState(0);
+  const [iiitrLogoClicks, setIiitrLogoClicks] = useState(0);
+
+  const handlePrLogoClick = () => {
+    setPrLogoClicks((prevCount) => {
+      const newCount = prevCount + 1;
+      if (newCount === 5) {
+        // Redirect after 3 clicks on PR logo
+        window.location.href = "/admin"; // Replace with the desired URL
+      }
+      return newCount;
+    });
+  };
+
+  const handleIiitrLogoClick = () => {
+    setIiitrLogoClicks((prevCount) => {
+      const newCount = prevCount + 1;
+      if (newCount === 1) {
+        // Redirect after 2 clicks on IIIT Raichur logo
+        window.location.href = "https://iiitr.ac.in"; // Replace with the desired URL
+      }
+      return newCount;
+    });
+  };
 
   return (
     <div className="bg-black text-gray-500">
@@ -13,7 +39,8 @@ const Footer: React.FC = () => {
             <img
               src="/iiitr.png"
               alt="IIIT Raichur Logo"
-              className="h-16 w-auto object-contain"
+              className="h-16 w-auto object-contain cursor-pointer"
+              onClick={handleIiitrLogoClick}
             />
           </div>
 
@@ -46,7 +73,6 @@ const Footer: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-center mt-5 space-x-6">
-              
               <a
                 href="https://youtube.com"
                 target="_blank"
@@ -90,12 +116,13 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* PR Logo */}
+          {/* PR Logo with Click Handler */}
           <div className="flex justify-center">
             <img
               src="/pr_logo.jpg"
               alt="PR Logo"
-              className="h-32 w-auto object-contain"
+              className="h-32 w-auto object-contain cursor-pointer"
+              onClick={handlePrLogoClick}
             />
           </div>
         </div>
