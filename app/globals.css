@@ -159,3 +159,9 @@ html {
     blinkCursor 0.5s step-end infinite alternate;
   margin-top: 1.5em;
 }
+
+.audiowide-regular {
+  font-family: "Audiowide", serif;
+  font-weight: 400;
+  font-style: normal;
+}
