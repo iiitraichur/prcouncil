@@ -36,7 +36,6 @@ const teams = {
       email: 'ad23b1020@iiitr.ac.in',
     },
   ],
-  
   'Shutter Squad': [
     {
       name: 'S Jaswanth',
