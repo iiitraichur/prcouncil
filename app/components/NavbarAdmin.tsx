@@ -86,7 +86,7 @@ const NavbarAdmin: React.FC = () => {
               className="cursor-pointer"
             >
               <Image
-                src="/pr_logo.jpg"
+                src="/logos/pr_logo.jpg"
                 alt="PR Logo"
                 width={60}
                 height={60}

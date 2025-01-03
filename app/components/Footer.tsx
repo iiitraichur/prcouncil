@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
           {/* IIIT Raichur Logo */}
           <div className="flex justify-center">
             <img
-              src="/iiitr.png"
+              src="/logos/iiitr.png"
               alt="IIIT Raichur Logo"
               className="h-16 w-auto object-contain cursor-pointer"
               onClick={handleIiitrLogoClick}
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
           {/* PR Logo with Click Handler */}
           <div className="flex justify-center">
             <img
-              src="/pr_logo.jpg"
+              src="/logos/pr_logo.jpg"
               alt="PR Logo"
               className="h-32 w-auto object-contain cursor-pointer"
               onClick={handlePrLogoClick}
