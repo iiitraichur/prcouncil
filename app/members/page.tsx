@@ -1,44 +1,237 @@
-'use client';
+"use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaEnvelope } from 'react-icons/fa'; // Import icons
+import { FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 type TeamMember = {
   name: string;
   role: string;
   photo: string;
-  bio: string;
   linkedin: string;
   email: string;
 };
 
-const teamMembers: TeamMember[] = [
-  {
-    name: 'Harsha',
-    role: 'PR Lead',
-    photo: 'https://i.ibb.co/tCKVFmM/harsha1.png',
-    bio: 'Dedicated leader with a passion for innovation.',
-    linkedin: 'https://www.linkedin.com/in/kvjharsha/', // Replace with actual LinkedIn profile
-    email: 'cs23b1034@iiitr.ac.in', // Replace with actual email
-  },
-  {
-    name: 'Santhosh',
-    role: 'Shutter Squad',
-    photo: 'https://i.ibb.co/dBv74SF/santhosh.png',
-    bio: 'Dedicated to photography and passionate about technology.',
-    linkedin: 'https://www.linkedin.com/in/santhosh-yanamadni-801b56299?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
-    email: 'ad23b1060@iiitr.ac.in',
-  },
-  {
-    name: 'Abhishek',
-    role: 'CC Ideation Lead',
-    photo: 'https://i.ibb.co/Zg48jsJ/abhishek.png',
-    bio: 'Creative thinker and innovation enthusiast.',
-    linkedin: 'https://www.linkedin.com/in/abhishek-buddiga-bb5a0b2b8/',
-    email: 'ad23b1012@iiitr.ac.in',
-  },
-];
+const teams = {
+  'Overall lead': [
+    {
+      name: 'Ashutosh Govind Singh',
+      role: 'Mentor',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/ashwhotosh/',
+      email: 'cs22b1013@iiitr.ac.in',
+    },
+    {
+      name: 'K V Jaya Harsha',
+      role: 'Secretary 1',
+      photo: 'https://i.ibb.co/tCKVFmM/harsha1.png',
+      linkedin: 'https://www.linkedin.com/in/kvjharsha/',
+      email: 'cs23b1034@iiitr.ac.in',
+    },
+    {
+      name: 'G Jashwanth',
+      role: 'Secretary 2',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/jashwanth-guguloth-411017283/',
+      email: 'ad23b1020@iiitr.ac.in',
+    },
+  ],
+  
+  'Shutter Squad': [
+    {
+      name: 'S Jaswanth',
+      role: 'Shutter Squad Lead',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/jaswanth-sunkara-21292a29a',
+      email: 'cs23b1073@iiitr.ac.in',
+    },
+    {
+      name: 'Santhosh',
+      role: 'Core Team',
+      photo: 'https://i.ibb.co/dBv74SF/santhosh.png',
+      linkedin: 'https://www.linkedin.com/in/santhosh-yanamadni-801b56299',
+      email: 'ad23b1060@iiitr.ac.in',
+    },
+    {
+      name: 'B Vasudevareddy',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/byreddy-vasudevareddy-5525942a7',
+      email: 'ad23b1013@iiitr.ac.in', 
+    }, 
+    {
+      name: 'V Sowmya',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/sowmya-vadde-5b82052b6',
+      email: 'cs23b1077@iiitr.ac.in', 
+    },  
+    {
+      name: 'Harsh Kholwar',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/harsh-kholwar-b369b2332/',
+      email: 'mc24b1012@iiitr.ac.in', 
+    },  
+    {
+      name: 'Sravanthi',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/sravanthi-bevara-351996327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'cs24b1010@iiitr.ac.in', 
+    },  
+    {
+      name: 'Tanmay Mallik',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/tanmay-mallik-174a202a0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'cs24b1058@iiitr.ac.in', 
+    },    
+  ],
+  'Content and Creatives': [
+    {
+      name: 'Abhishek Buddiga',
+      role: 'Ideation Team Lead',
+      photo: 'https://i.ibb.co/Zg48jsJ/abhishek.png',
+      linkedin: 'https://www.linkedin.com/in/abhishek-buddiga-bb5a0b2b8/',
+      email: 'ad23b1012@iiitr.ac.in',
+    },
+    {
+      name: 'P Charukesh',
+      role: 'Graphic Team Lead',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/pyla-charukesh-937aa02b7/',
+      email: 'ad23b1043@iiitr.ac.in', 
+    },
+    {
+      name: 'O Vinay Reddy',
+      role: 'Graphic Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/vinay-reddy-9aa439295/',
+      email: 'ad23b1039@iiitr.ac.in', 
+    },  
+    {
+      name: 'K Deepthika',
+      role: 'Ideation Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/kakarla-deepthika-2b134b2ba',
+      email: 'cs23b1030@iiitr.ac.in', 
+    },  
+    {
+      name: 'k Lakshmi Sravika',
+      role: 'Graphic Team',
+      photo: '',
+      linkedin: 'https://linkedin.com/in/lakshmi-sravika-k-ab19772a7',
+      email: 'ad23b1024@iiitr.ac.in', 
+    },  
+    {
+      name: 'Balisetty Tony Madhuri',
+      role: 'Graphic Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/sita-rama-4b9203331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'ad24b1012@iiitr.ac.in', 
+    },  
+    {
+      name: 'Naveen Mittal',
+      role: 'Ideation Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/naveen-mittal-267a291ba?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'ad24b1044@iiitr.ac.in', 
+    },  
+    {
+      name: 'Saransh Sharma',
+      role: 'Graphic Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/saransh-sharma-3a3a3a2b5/',
+      email: 'cs24b1052@iiitr.ac.in', 
+    },  
+  ],
+  'Video Team': [
+    {
+      name: 'Vijay N Gowd',
+      role: 'Team Lead',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/kota-vijay-narasimha-gowd-a91a162a5/',
+      email: 'cs23b1035@iiitr.ac.in',
+    },
+    {
+      name: 'Sarthak Jain',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/sarthak-jain-191797254/',
+      email: 'cs23b1062@iiitr.ac.in', 
+    },  
+    {
+      name: 'Smaran Reddy',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/smaran-reddy-57a5b62a0/',
+      email: 'cs23b1011@iiitr.ac.in', 
+    },  
+    {
+      name: 'Mayank Soni',
+      role: 'Core Team',
+      photo: '',
+      linkedin: 'https://www.linkedin.com/in/mayank-soni-2580a9337?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'cs24b1031@iiitr.ac.in', 
+    },
+  ],
+};
+
+const TeamMemberCard: React.FC<TeamMember> = ({ name, role, photo, linkedin, email }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}
+    className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-3xl shadow-xl p-6 flex flex-col items-center text-center min-h-[300px] min-w-[250px] hover:scale-105 transition-transform duration-150"
+  >
+    <img
+      src={photo || 'https://via.placeholder.com/150'}
+      alt={name}
+      className="w-32 h-32 rounded-full border-4 border-lime-400 mb-4"
+    />
+    <h2 className="text-xl font-bold text-white">{name}</h2>
+    <p className="text-lime-400 text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+      {role}
+    </p>
+    <div className="flex space-x-4 mt-4">
+      <a
+        href={linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-lime-400 hover:text-lime-500 transition-all text-2xl"
+        aria-label={`LinkedIn profile of ${name}`}
+      >
+        <FaLinkedin />
+      </a>
+      <a
+        href={`mailto:${email}`}
+        className="text-lime-400 hover:text-lime-500 transition-all text-2xl"
+        aria-label={`Email ${name}`}
+      >
+        <FaEnvelope />
+      </a>
+    </div>
+  </motion.div>
+);
+
+const TeamSection: React.FC<{ title: string; team: TeamMember[] }> = ({ title, team }) => (
+  <>
+    <motion.h2
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
+      className="text-4xl font-extrabold text-lime-400 mt-16 mb-12"
+    >
+      {title}
+    </motion.h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {team.map((member, index) => (
+        <TeamMemberCard key={index} {...member} />
+      ))}
+    </div>
+  </>
+);
 
 const Page: React.FC = () => {
   return (
@@ -56,43 +249,9 @@ const Page: React.FC = () => {
       >
         Meet Our Team
       </motion.h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {teamMembers.map((member, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: index * 0.2 }}
-            className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-3xl shadow-xl p-6 flex flex-col items-center text-center"
-          >
-            <img
-              src={member.photo}
-              alt={member.name}
-              className="w-32 h-32 rounded-full border-4 border-lime-400 mb-4"
-            />
-            <h2 className="text-xl font-bold text-white">{member.name}</h2>
-            <p className="text-lime-400 text-sm font-semibold">{member.role}</p>
-            <p className="text-gray-400 mt-4">{member.bio}</p>
-            <div className="flex space-x-4 mt-4">
-              <a
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lime-400 hover:text-lime-500 transition-all text-2xl"
-              >
-                <FaLinkedin />
-              </a>
-              <a
-                href={`mailto:${member.email}`}
-                className="text-lime-400 hover:text-lime-500 transition-all text-2xl"
-              >
-                <FaEnvelope />
-              </a>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      {Object.entries(teams).map(([key, members]) => (
+        <TeamSection key={key} title={key.replace(/([a-z])([A-Z])/g, '$1 $2')} team={members} />
+      ))}
     </motion.div>
   );
 };
