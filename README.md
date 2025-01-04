@@ -61,6 +61,6 @@ For inquiries, suggestions, or support, feel free to reach out at **[prcouncil@i
 
 ---
 
-Thank you for visiting the **PR Council** website. Let’s make 2024 a year to remember! 🎉  
+Thank you for visiting the **PR Council** website. 🎉  
 
 ---
