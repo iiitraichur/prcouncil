@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="flex justify-center mt-5 space-x-6">
               <a
-                href="https://youtube.com"
+                href="https://www.youtube.com/@IIITRaichur"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition"
