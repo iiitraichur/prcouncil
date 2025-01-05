@@ -12,8 +12,7 @@ const Footer: React.FC = () => {
     setPrLogoClicks((prevCount) => {
       const newCount = prevCount + 1;
       if (newCount === 5) {
-        // Redirect after 3 clicks on PR logo
-        window.location.href = "/admin"; // Replace with the desired URL
+        window.location.href = "/admin"; 
       }
       return newCount;
     });
@@ -22,9 +21,8 @@ const Footer: React.FC = () => {
   const handleIiitrLogoClick = () => {
     setIiitrLogoClicks((prevCount) => {
       const newCount = prevCount + 1;
-      if (newCount === 1) {
-        // Redirect after 2 clicks on IIIT Raichur logo
-        window.location.href = "https://iiitr.ac.in"; // Replace with the desired URL
+      if (newCount === 3) {
+        window.location.href = "https://iiitr.ac.in"; 
       }
       return newCount;
     });
@@ -34,7 +32,6 @@ const Footer: React.FC = () => {
     <div className="bg-black text-gray-500">
       <footer className="py-8 px-4">
         <div className="grid md:grid-cols-3 grid-cols-1 items-center gap-6">
-          {/* IIIT Raichur Logo */}
           <div className="flex justify-center">
             <img
               src="/logos/iiitr.png"
@@ -44,7 +41,6 @@ const Footer: React.FC = () => {
             />
           </div>
 
-          {/* Links Section */}
           <div className="text-center">
             <h2 className="text-lg font-semibold text-gray-300">
               Inspiring Connections, Amplifying Voices
@@ -82,7 +78,7 @@ const Footer: React.FC = () => {
                 <FaYoutube size={24} />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/iiitraichur/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition"
@@ -90,7 +86,7 @@ const Footer: React.FC = () => {
                 <FaFacebookF size={24} />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/iiitraichur"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition"
@@ -98,7 +94,7 @@ const Footer: React.FC = () => {
                 <FaTwitter size={24} />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/school/iiitraichur/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition"
@@ -106,7 +102,7 @@ const Footer: React.FC = () => {
                 <FaLinkedin size={24} />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/iiit_raichur/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition"
@@ -116,7 +112,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* PR Logo with Click Handler */}
           <div className="flex justify-center">
             <img
               src="/logos/pr_logo.jpg"
@@ -127,7 +122,6 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Footer Bottom Section */}
         <div className="text-center text-sm mt-6">
           <p>© {currentYear} Public Relations Council, IIIT Raichur. All rights reserved.</p>
         </div>
