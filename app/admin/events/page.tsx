@@ -200,7 +200,7 @@ function EventsPage() {
               onChange={(e) => setConfirmationInput(e.target.value)}
               placeholder="Enter event title"
               className="mb-4 p-3 rounded-lg bg-gray-800 text-gray-600"
-              disabled={deleteAttempts >= 2 && lastDeleteTime && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
+              disabled={deleteAttempts >= 2 && lastDeleteTime !== null && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
             />
             <div className="flex justify-end space-x-4">
               <button
@@ -212,7 +212,7 @@ function EventsPage() {
               <button
                 onClick={handleDelete}
                 className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400"
-                disabled={deleteAttempts >= 2 && lastDeleteTime && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
+                disabled={deleteAttempts >= 2 && lastDeleteTime !== null && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
               >
                 Delete
               </button>
