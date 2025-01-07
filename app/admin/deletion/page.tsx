@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // Assume Firebase is initialized in this file
-import Head from 'next/head';
-import 'tailwindcss/tailwind.css';
+import Head from "next/head";
+import "tailwindcss/tailwind.css";
 
 interface PhotoDeletionRequest {
   id: string;
@@ -18,6 +18,9 @@ export default function Dashboard() {
   const [requests, setRequests] = useState<PhotoDeletionRequest[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<PhotoDeletionRequest[]>([]);
   const [filter, setFilter] = useState<string>("");
+  const [deleteRequest, setDeleteRequest] = useState<PhotoDeletionRequest | null>(null);
+  const [confirmationInput, setConfirmationInput] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "photoDeletionRequests"), (querySnapshot) => {
@@ -44,9 +47,20 @@ export default function Dashboard() {
     );
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteDoc(doc(db, "photoDeletionRequests", id));
-    // Firestore will automatically update the UI due to onSnapshot
+  const handleDelete = async () => {
+    if (deleteRequest && confirmationInput === deleteRequest.name) {
+      try {
+        await deleteDoc(doc(db, "photoDeletionRequests", deleteRequest.id));
+        setDeleteRequest(null);
+        setConfirmationInput("");
+        setSuccessMessage("Successfully deleted the request!");
+        setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
+      } catch (error) {
+        console.error("Error deleting request: ", error);
+      }
+    } else {
+      alert("Name does not match. Please try again.");
+    }
   };
 
   return (
@@ -58,6 +72,11 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">Photo Deletion Requests Dashboard</h1>
       </header>
       <main className="p-4">
+        {successMessage && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg">
+            {successMessage}
+          </div>
+        )}
         <div className="mb-4 flex justify-center">
           <input
             type="text"
@@ -96,7 +115,7 @@ export default function Dashboard() {
                   <td className="p-2 break-words">{request.reason}</td>
                   <td className="p-2">
                     <button
-                      onClick={() => handleDelete(request.id)}
+                      onClick={() => setDeleteRequest(request)}
                       className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                     >
                       Delete
@@ -111,6 +130,41 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+
+      {deleteRequest && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+          <div className="bg-gray-900 text-gray-200 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold text-red-500 mb-4">Confirm Deletion</h2>
+            <p className="mb-4">
+              To confirm deletion, type the name <span className="font-bold">{deleteRequest.name}</span> below:
+            </p>
+            <input
+              type="text"
+              value={confirmationInput}
+              onChange={(e) => setConfirmationInput(e.target.value)}
+              placeholder="Enter name to confirm"
+              className="mb-4 w-full p-2 rounded-md bg-gray-800 text-gray-200"
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => {
+                  setDeleteRequest(null);
+                  setConfirmationInput("");
+                }}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

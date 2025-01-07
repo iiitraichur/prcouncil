@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineUser, AiOutlineCalendar, AiOutlineClockCircle, AiOutlineLink } from "react-icons/ai";
-import { DatePicker, Modal, Input, message } from "antd";
+import { DatePicker, Input, message } from "antd";
 import '@ant-design/v5-patch-for-react-19';
-import { collection, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface Event {
   id: string;
   eventTitle: string;
   user: string;
-  date: string; // ISO 8601 formatted
-  session: string; // Could be "Morning", "Afternoon", "Evening"
-  time: string; // Add time field to Firestore (e.g., '14:00' for 2 PM)
+  date: string;
+  session: string;
+  time: string;
   driveLink: string;
   pictureCredits?: string[];
 }
@@ -23,13 +23,16 @@ function EventsPage() {
   const [search, setSearch] = useState("");
   const [selectedSession, setSelectedSession] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [editEvent, setEditEvent] = useState<Event | null>(null);
+  const [deleteEvent, setDeleteEvent] = useState<Event | null>(null);
+  const [confirmationInput, setConfirmationInput] = useState("");
+  const [deleteAttempts, setDeleteAttempts] = useState<number>(0);
+  const [lastDeleteTime, setLastDeleteTime] = useState<Date | null>(null);
 
   useEffect(() => {
     const eventsQuery = query(
       collection(db, "events"),
-      orderBy("date", "desc"),   // Sort events by date in descending order (latest first)
-      orderBy("time", "desc")    // Sort events by time in descending order (latest first)
+      orderBy("date", "desc"),
+      orderBy("time", "desc")
     );
 
     const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
@@ -43,28 +46,33 @@ function EventsPage() {
     return () => unsubscribe();
   }, []);
 
-  const handleDelete = async (eventId: string) => {
-    try {
-      await deleteDoc(doc(db, "events", eventId));
-      message.success("Event deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting event: ", error);
-      message.error("Failed to delete event.");
-    }
-  };
+  const handleDelete = async () => {
+    const now = new Date();
 
-  const handleEdit = async () => {
-    if (editEvent) {
-      try {
-        await updateDoc(doc(db, "events", editEvent.id), {
-          ...editEvent,
-        });
-        message.success("Event updated successfully!");
-        setEditEvent(null);
-      } catch (error) {
-        console.error("Error updating event: ", error);
-        message.error("Failed to update event.");
+    if (deleteAttempts >= 2) {
+      if (lastDeleteTime && now.getTime() - lastDeleteTime.getTime() < 3600000) {
+        message.error("You can only delete 2 events per hour. Please try again later.");
+        return;
+      } else {
+        setDeleteAttempts(0); // Reset attempts after 1 hour
       }
+    }
+
+    if (deleteEvent && confirmationInput === deleteEvent.eventTitle) {
+      try {
+        await deleteDoc(doc(db, "events", deleteEvent.id));
+        setDeleteAttempts((prev) => prev + 1);
+        setLastDeleteTime(now);
+        message.success(`Event deleted successfully! Attempts left: ${1 - deleteAttempts}`);
+      } catch (error) {
+        console.error("Error deleting event: ", error);
+        message.error("Failed to delete event.");
+      } finally {
+        setDeleteEvent(null);
+        setConfirmationInput("");
+      }
+    } else {
+      message.error("Event title does not match. Please try again.");
     }
   };
 
@@ -88,7 +96,6 @@ function EventsPage() {
         Explore Events
       </motion.h1>
 
-      {/* Filters */}
       <div className="w-full max-w-5xl flex flex-col md:flex-row gap-4 mb-12">
         <input
           type="text"
@@ -110,7 +117,7 @@ function EventsPage() {
         <DatePicker
           onChange={(date) => setSelectedDate(date ? date.toDate() : null)}
           placeholder="Select Date"
-          className="flex-1 p-3 rounded-lg bg-gray-800  focus:ring-2 focus:ring-lime-500 outline-none"
+          className="flex-1 p-3 rounded-lg bg-gray-800 focus:ring-2 focus:ring-lime-500 outline-none"
           getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}
         />
         <button
@@ -125,7 +132,6 @@ function EventsPage() {
         </button>
       </div>
 
-      {/* Event List */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-5xl"
         initial={{ opacity: 0 }}
@@ -164,35 +170,10 @@ function EventsPage() {
               >
                 Drive Link
               </a>
-              
             </div>
-
-            {/* picture credits */}
-{/* Picture Credits */}
-{Array.isArray(event.pictureCredits) && event.pictureCredits.length > 0 && (
-  <div className="flex flex-wrap gap-2 mt-2">
-    <span className="text-sm text-gray-400">Picture Credits:</span>
-    {event.pictureCredits.map((credit, idx) => (
-      <span
-        key={idx}
-        className="text-sm text-gray-400"
-      >
-        {credit}
-      </span>
-    ))}
-  </div>
-)}
-
-
             <div className="flex space-x-2 mt-4">
               <button
-                onClick={() => setEditEvent(event)}
-                className="p-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-400 transition"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(event.id)}
+                onClick={() => setDeleteEvent(event)}
                 className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400 transition"
               >
                 Delete
@@ -202,62 +183,43 @@ function EventsPage() {
         ))}
       </motion.div>
 
-      {filteredEvents.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-gray-400 text-center mt-12"
-        >
-          No events found. Try adjusting your filters.
-        </motion.div>
-      )}
-
-      {/* Edit Modal */}
-      <Modal
-        title="Edit Event"
-        open={!!editEvent}
-        onCancel={() => setEditEvent(null)}
-        onOk={handleEdit}
-      >
-        {editEvent && (
-          <div className="space-y-4">
+      {deleteEvent && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+          <div className="bg-gray-900 text-gray-200 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold text-lime-400 mb-4">Confirm Deletion</h2>
+            <p className="mb-4">
+              To confirm deletion, type the event title <span className="font-bold">{deleteEvent.eventTitle}</span> below:
+            </p>
+            {deleteAttempts >= 2 && lastDeleteTime && new Date().getTime() - lastDeleteTime.getTime() < 3600000 ? (
+              <p className="text-red-500 text-sm mb-4">
+                You can only delete 2 events per hour. Please try again later.
+              </p>
+            ) : null}
             <Input
-              placeholder="Event Title"
-              value={editEvent.eventTitle}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, eventTitle: e.target.value })
-              }
+              value={confirmationInput}
+              onChange={(e) => setConfirmationInput(e.target.value)}
+              placeholder="Enter event title"
+              className="mb-4 p-3 rounded-lg bg-gray-800 text-gray-600"
+              disabled={deleteAttempts >= 2 && lastDeleteTime !== null && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
             />
-            <Input
-              placeholder="User"
-              value={editEvent.user}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, user: e.target.value })
-              }
-            />
-            
-            <Input
-              placeholder="Session"
-              value={editEvent.session}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, session: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Drive Link"
-              value={editEvent.driveLink}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, driveLink: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Drive Link"
-              value={editEvent.pictureCredits}
-            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setDeleteEvent(null)}
+                className="p-2 rounded-lg bg-gray-700 text-white font-bold hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400"
+                disabled={deleteAttempts >= 2 && lastDeleteTime !== null && new Date().getTime() - lastDeleteTime.getTime() < 3600000}
+              >
+                Delete
+              </button>
+            </div>
           </div>
-        )}
-      </Modal>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,30 +1,30 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase'; // Assuming you export your firebase config as `db`
-import { collection, addDoc } from 'firebase/firestore';
-import { toast } from 'react-toastify'; // For better error handling and notifications
-import 'react-toastify/dist/ReactToastify.css';
-import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
-import moment from 'moment-timezone';
+"use client";
+import React, { useState } from "react";
+import { db } from "@/lib/firebase"; // Assuming you export your firebase config as `db`
+import { collection, addDoc } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify"; // For notifications
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlinePlus, AiOutlineCloseCircle } from "react-icons/ai";
+import moment from "moment-timezone";
 
 function Page() {
   const [formData, setFormData] = useState({
-    user: '',
-    eventTitle: '',
-    session: 'Morning',
-    driveLink: '',
-    pictureCredits: [''],
+    user: "",
+    eventTitle: "",
+    session: "Morning",
+    driveLink: "",
+    pictureCredits: [""],
   });
   const [error, setError] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
-    if (!formData.user.trim()) errors.user = 'User is required';
-    if (!formData.eventTitle.trim()) errors.eventTitle = 'Event title is required';
-    if (!formData.driveLink.trim()) errors.driveLink = 'Drive link is required';
+    if (!formData.user.trim()) errors.user = "User is required";
+    if (!formData.eventTitle.trim()) errors.eventTitle = "Event title is required";
+    if (!formData.driveLink.trim()) errors.driveLink = "Drive link is required";
 
     formData.pictureCredits.forEach((credit, index) => {
-      if (!credit.trim()) errors[`pictureCredits-${index}`] = 'Picture credit is required';
+      if (!credit.trim()) errors[`pictureCredits-${index}`] = "Picture credit is required";
     });
 
     setError(errors);
@@ -35,30 +35,33 @@ function Page() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // Dynamically setting the current date and time in Asia/Kolkata timezone
-    const currentDate = moment().tz('Asia/Kolkata');
-    const date = currentDate.format('YYYY-MM-DD');
-    const time = currentDate.format('HH:mm:ss');
+    const currentDate = moment().tz("Asia/Kolkata");
+    const date = currentDate.format("YYYY-MM-DD");
+    const time = currentDate.format("HH:mm:ss");
 
     try {
-      const docRef = await addDoc(collection(db, 'events'), {
+      await addDoc(collection(db, "events"), {
         ...formData,
-        date, // Set the dynamically updated date
-        time, // Set the dynamically updated time
+        date,
+        time,
       });
-      toast.success('Event added successfully!');
-      console.log('Document written with ID: ', docRef.id);
-
+      toast.success("Event added successfully!", {
+        theme: "dark",
+        position: "bottom-center",
+      });
       setFormData({
-        user: '',
-        eventTitle: '',
-        session: 'Morning',
-        driveLink: '',
-        pictureCredits: [''],
+        user: "",
+        eventTitle: "",
+        session: "Morning",
+        driveLink: "",
+        pictureCredits: [""],
       });
     } catch (e) {
-      console.error('Error adding document: ', e);
-      toast.error('Failed to add event');
+      console.error("Error adding document: ", e);
+      toast.error("Failed to add event", {
+        theme: "dark",
+        position: "bottom-center",
+      });
     }
   };
 
@@ -68,7 +71,7 @@ function Page() {
   };
 
   const handleAddCredit = () => {
-    setFormData({ ...formData, pictureCredits: [...formData.pictureCredits, ''] });
+    setFormData({ ...formData, pictureCredits: [...formData.pictureCredits, ""] });
   };
 
   const handleCreditChange = (index: number, value: string) => {
@@ -175,6 +178,8 @@ function Page() {
           </button>
         </form>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
