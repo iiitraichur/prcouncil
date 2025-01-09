@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import { AiOutlineUser, AiOutlineCalendar, AiOutlineClockCircle, AiOutlineLink } from "react-icons/ai";
 import { DatePicker, Input, message } from "antd";
 import '@ant-design/v5-patch-for-react-19';
-import { collection, onSnapshot, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc, query, orderBy, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import dayjs from "dayjs";
+
 
 interface Event {
   id: string;
@@ -27,6 +29,16 @@ function EventsPage() {
   const [confirmationInput, setConfirmationInput] = useState("");
   const [deleteAttempts, setDeleteAttempts] = useState<number>(0);
   const [lastDeleteTime, setLastDeleteTime] = useState<Date | null>(null);
+  const [editEvent, setEditEvent] = useState<Event | null>(null);
+  const [editForm, setEditForm] = useState({
+  eventTitle: "",
+  user: "",
+  date: "",
+  session: "",  
+  time: "",
+  driveLink: "",
+});
+
 
   useEffect(() => {
     const eventsQuery = query(
@@ -75,6 +87,33 @@ function EventsPage() {
       message.error("Event title does not match. Please try again.");
     }
   };
+
+  const handleEdit = async () => {
+    if (editEvent) {
+      try {
+        await updateDoc(doc(db, "events", editEvent.id), editForm);
+        message.success("Event updated successfully!");
+        setEditEvent(null);
+      } catch (error) {
+        console.error("Error updating event: ", error);
+        message.error("Failed to update event.");
+      }
+    }
+  };
+
+  
+  const openEditModal = (event: Event) => {
+    setEditEvent(event);
+    setEditForm({
+      eventTitle: event.eventTitle,
+      user: event.user,
+      date: event.date,
+      session: event.session,
+      time: event.time,
+      driveLink: event.driveLink,
+    });
+  };
+  
 
   const filteredEvents = events.filter((event) => {
     const matchesSearch = event.eventTitle.toLowerCase().includes(search.toLowerCase());
@@ -172,13 +211,20 @@ function EventsPage() {
               </a>
             </div>
             <div className="flex space-x-2 mt-4">
-              <button
-                onClick={() => setDeleteEvent(event)}
-                className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400 transition"
-              >
-                Delete
-              </button>
-            </div>
+  <button
+    onClick={() => setDeleteEvent(event)}
+    className="p-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-400 transition"
+  >
+    Delete
+  </button>
+  <button
+    onClick={() => openEditModal(event)}
+    className="p-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-400 transition"
+  >
+    Edit
+  </button>
+</div>
+
           </motion.div>
         ))}
       </motion.div>
@@ -220,6 +266,68 @@ function EventsPage() {
           </div>
         </div>
       )}
+      {editEvent && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+    <div className="bg-gray-900 text-gray-200 p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h2 className="text-2xl font-bold text-lime-400 mb-4">Edit Event</h2>
+      <div className="space-y-4">
+        <Input
+          value={editForm.eventTitle}
+          onChange={(e) => setEditForm({ ...editForm, eventTitle: e.target.value })}
+          placeholder="Event Title"
+          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+        />
+        <Input
+          value={editForm.user}
+          onChange={(e) => setEditForm({ ...editForm, user: e.target.value })}
+          placeholder="User"
+          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+        />
+        <DatePicker
+          value={editForm.date ? dayjs(editForm.date) : null}
+          onChange={(date) => setEditForm({ ...editForm, date: date?.toDate().toISOString() || "" })}
+          className="p-3 rounded-lg bg-gray-800"
+        />
+        <select
+          value={editForm.session}
+          onChange={(e) => setEditForm({ ...editForm, session: e.target.value })}
+          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+        >
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+          <option value="Evening">Evening</option>
+        </select>
+        <Input
+          value={editForm.time}
+          onChange={(e) => setEditForm({ ...editForm, time: e.target.value })}
+          placeholder="Time"
+          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+        />
+        <Input
+          value={editForm.driveLink}
+          onChange={(e) => setEditForm({ ...editForm, driveLink: e.target.value })}
+          placeholder="Drive Link"
+          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+        />
+      </div>
+      <div className="flex justify-end space-x-4 mt-4">
+        <button
+          onClick={() => setEditEvent(null)}
+          className="p-2 rounded-lg bg-gray-700 text-white font-bold hover:bg-gray-600"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleEdit}
+          className="p-2 rounded-lg bg-lime-500 text-black font-bold hover:bg-lime-400"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
