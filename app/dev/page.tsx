@@ -57,7 +57,7 @@ export default function DevelopersPage() {
               className="w-32 h-32 rounded-full mx-auto mb-4 border-[4px] border-gradient-to-r from-purple-400 to-pink-500"
             />
             <h2 className="text-2xl font-bold text-center mb-4">{dev.name}</h2>
-            <p align="center">Batch {dev.batch}</p>
+            <p className="text-center">Batch {dev.batch}</p>
             <div className="flex justify-center space-x-6 mt-4">
               <a
                 href={dev.linkedin}
