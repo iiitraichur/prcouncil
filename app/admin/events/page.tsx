@@ -205,7 +205,7 @@ function EventsPage() {
                 href={event.driveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
+                className="text-blue-400 hover:underline "
               >
                 Drive Link
               </a>
@@ -266,7 +266,7 @@ function EventsPage() {
           </div>
         </div>
       )}
-      {editEvent && (
+{editEvent && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
     <div className="bg-gray-900 text-gray-200 p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 className="text-2xl font-bold text-lime-400 mb-4">Edit Event</h2>
@@ -275,39 +275,30 @@ function EventsPage() {
           value={editForm.eventTitle}
           onChange={(e) => setEditForm({ ...editForm, eventTitle: e.target.value })}
           placeholder="Event Title"
-          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+          className="p-3 rounded-lg bg-gray-800 hover:bg-black text-lime-400 focus:ring-2 focus:ring-lime-400 focus:border-lime-400 focus:bg-gray-800 outline-none"
         />
         <Input
           value={editForm.user}
           onChange={(e) => setEditForm({ ...editForm, user: e.target.value })}
           placeholder="User"
-          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+          className="p-3 rounded-lg bg-gray-800 hover:bg-black text-lime-400 focus:ring-2 focus:ring-lime-400 focus:border-lime-400 focus:bg-gray-800 outline-none"
         />
-        <DatePicker
-          value={editForm.date ? dayjs(editForm.date) : null}
-          onChange={(date) => setEditForm({ ...editForm, date: date?.toDate().toISOString() || "" })}
-          className="p-3 rounded-lg bg-gray-800"
-        />
+        
         <select
           value={editForm.session}
           onChange={(e) => setEditForm({ ...editForm, session: e.target.value })}
-          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+          className="p-3 rounded-lg bg-gray-800 text-lime-400 focus:ring-2 focus:ring-lime-400 focus:border-lime-400 outline-none"
         >
           <option value="Morning">Morning</option>
           <option value="Afternoon">Afternoon</option>
           <option value="Evening">Evening</option>
         </select>
-        <Input
-          value={editForm.time}
-          onChange={(e) => setEditForm({ ...editForm, time: e.target.value })}
-          placeholder="Time"
-          className="p-3 rounded-lg bg-gray-800 text-gray-200"
-        />
+        
         <Input
           value={editForm.driveLink}
           onChange={(e) => setEditForm({ ...editForm, driveLink: e.target.value })}
           placeholder="Drive Link"
-          className="p-3 rounded-lg bg-gray-800 text-gray-200"
+          className="p-3 rounded-lg bg-gray-800 text-lime-400 focus:ring-2 focus:ring-lime-400 focus:border-lime-400 focus:bg-gray-800 outline-none hover:bg-black"
         />
       </div>
       <div className="flex justify-end space-x-4 mt-4">
@@ -327,6 +318,8 @@ function EventsPage() {
     </div>
   </div>
 )}
+
+
 
     </div>
   );

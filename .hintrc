@@ -22,6 +22,7 @@
       {
         "nested-interactive": "off"
       }
-    ]
+    ],
+    "button-type": "off"
   }
 }
