@@ -41,7 +41,7 @@ const teams = {
     {
       name: 'S Jaswanth',
       role: 'Shutter Squad Lead',
-      photo: 'members/s-jaswanth.png',
+      photo: 'members/s-jaswanth.jpeg',
       linkedin: 'https://www.linkedin.com/in/jaswanth-sunkara-21292a29a',
       email: 'cs23b1073@iiitr.ac.in',
     },
