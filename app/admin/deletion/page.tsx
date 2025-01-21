@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase"; // Assume Firebase is initialized in this file
+import { db } from "@/lib/firebase";
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
 
