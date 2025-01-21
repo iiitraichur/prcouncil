@@ -6,7 +6,7 @@ import { DatePicker, Input, message } from "antd";
 import '@ant-design/v5-patch-for-react-19';
 import { collection, onSnapshot, deleteDoc, doc, query, orderBy, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import dayjs from "dayjs";
+
 
 
 interface Event {
@@ -151,12 +151,13 @@ function EventsPage() {
           <option value="">All Sessions</option>
           <option value="Morning">Morning</option>
           <option value="Afternoon">Afternoon</option>
-          <option value="Evening">Evening</option>
+          <option value=""></option>
+          <option value="Night">Night</option>
         </select>
         <DatePicker
           onChange={(date) => setSelectedDate(date ? date.toDate() : null)}
           placeholder="Select Date"
-          className="flex-1 p-3 rounded-lg bg-gray-800 focus:ring-2 focus:ring-lime-500 outline-none"
+          className="flex-1 p-3 rounded-lg text-gray-800 bg-gray-800 focus:ring-2 focus:ring-lime-500 outline-none"
           getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}
         />
         <button
@@ -291,7 +292,8 @@ function EventsPage() {
         >
           <option value="Morning">Morning</option>
           <option value="Afternoon">Afternoon</option>
-          <option value="Evening">Evening</option>
+          <option value=""></option>
+          <option value="Night">Night</option>
         </select>
         
         <Input

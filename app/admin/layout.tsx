@@ -1,7 +1,6 @@
 "use client"
 import React, { ReactNode } from 'react';
-import { useRouter } from 'next/navigation'; // Import for routing if needed
-
+import { useRouter } from 'next/navigation'; 
 import PrivateRoute from "../components/PrivateRoute";
 import NavbarAdmin from "../components/NavbarAdmin";
 
@@ -10,7 +9,7 @@ type LayoutProps = {
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const router = useRouter(); // Use this for any routing logic, if required
+  const router = useRouter(); 
 
   return (
     <PrivateRoute>

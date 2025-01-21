@@ -201,7 +201,7 @@ const TeamMemberCard: React.FC<TeamMember> = ({ name, role, photo, linkedin, ema
         rel="noopener noreferrer"
         className="text-lime-400 hover:text-lime-500 transition-transform transform hover:scale-110 text-2xl"
         aria-label={`LinkedIn profile of ${name}`}
-      >
+      > 
         <FaLinkedin />
       </a>
       <a
