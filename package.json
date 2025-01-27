@@ -17,7 +17,7 @@
     "antd": "^5.23.1",
     "dayjs": "^1.11.13",
     "firebase": "^11.1.0",
-    "framer-motion": "^11.18.2",
+    "framer-motion": "^12.0.5",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.46",
     "next": "15.1.4",
