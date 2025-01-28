@@ -3,7 +3,7 @@
 ## 🌟 **Overview** 🌍  
 Welcome to the **Public Relations Council** website for **IIIT Raichur**! This platform serves as the official hub for all Public Relations activities, events, and announcements for the academic year **2024**.  
 
-> ⚠️ **Disclaimer:** This website is an initiative of the PR Council and is not officially endorsed by the Indian Institute of Information Technology Raichur.  
+> 🟢 This website is an initiative of the PR Council and is officially endorsed by the Indian Institute of Information Technology Raichur.  
 
 ### 🌐 **Live Website**  
 🔗 [Visit PR Council Website](https://prciiitr.vercel.app)  
